@@ -1,67 +1,55 @@
 import dbConnect from "@/lib/mongodb";
 import Product from "@/models/Product";
 import Settings from "@/models/Settings";
-import HomeClient from "@/components/HomeClient";
+import HomePage from "@/components/HomePage";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Etomidate Shop — Premium Powder, K-Pods Vape & Liquid",
+  title: "WeedLaps — Premium Cannabis Flower",
   description:
-    "EtomidateShop.com — Premium etomidate powder, K-Pods vape cartridges & liquid solutions. Lab-tested ≥99.8% purity. COA certified, fast discreet worldwide shipping within 24h.",
+    "WeedLaps.com — Premium cannabis flower. Indica, sativa & hybrid strains, independently lab tested and shipped discreetly worldwide.",
   keywords: [
-    "buy etomidate online",
-    "etomidate for sale",
-    "etomidate powder buy",
-    "etomidate vape pods buy",
-    "etomidate K-Pods",
-    "etomidate liquid buy",
-    "pharmaceutical grade etomidate",
-    "etomidate 99.8% purity",
-    "etomidate COA included",
-    "HPLC verified etomidate",
-    "research grade etomidate",
-    "discreet etomidate shipping",
-    "etomidate worldwide delivery 24h",
-    "etomidate bulk discount",
-    "best etomidate supplier",
-    "trusted etomidate vendor",
-    "etomidate shop online",
-    "etomidate vape cartridge",
-    "etomidate disposable vape",
-    "etomidate liquid solution",
-    "space oil",
-    "buy space oil",
-    "space oil pods",
-    "space pods vape",
-    "etomidate e-liquid",
-    "etomidate flavours",
-    "etomidate oil",
-    "etomidate drops",
-    "etomidate concentrate",
-    "pharmaceutical vape pods",
-    "33125-97-2",
-    "CAS 33125-97-2",
-    "buy CAS 33125-97-2",
-    "etomidate CAS number",
-    "etomidate 33125-97-2",
+    "buy weed online",
+    "cannabis for sale",
+    "buy cannabis flower",
+    "AAAA weed",
+    "craft cannabis",
+    "premium cannabis",
+    "top shelf weed",
+    "lab tested cannabis",
+    "discreet weed shipping",
+    "cannabis worldwide delivery",
+    "weed bulk discount",
+    "best online dispensary",
+    "trusted cannabis vendor",
+    "online weed shop",
+    "indica strains",
+    "sativa strains",
+    "hybrid weed",
+    "buy marijuana online",
+    "mail order marijuana",
+    "organic cannabis flower",
+    "high THC strains",
+    "weed delivery",
+    "420 online shop",
   ],
   openGraph: {
-    title: "Etomidate Shop — Premium Powder, Vape & Liquid",
+    title: "WeedLaps — Premium Cannabis Flower",
     description:
-      "EtomidateShop.com — Premium etomidate powder, K-Pods vape cartridges & liquid. ≥99.8% purity, lab-tested with COA. Fast discreet shipping worldwide.",
-    url: "https://etomidateshop.com",
-    siteName: "EtomidateShop.com",
+      "WeedLaps.com — Premium cannabis flower. Indica, sativa & hybrid strains, lab tested and shipped discreetly worldwide.",
+    url: "https://weedlaps.com",
+    siteName: "WeedLaps.com",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Etomidate Shop — Premium Powder, Vape & Liquid",
+    title: "WeedLaps — Premium Cannabis Flower",
     description:
-      "EtomidateShop.com — Premium etomidate powder, K-Pods vape & liquid. ≥99.8% purity, lab-tested, COA included. Ships worldwide within 24h.",
+      "WeedLaps.com — Premium cannabis flower. Indica, sativa & hybrid strains, lab tested and shipped discreetly worldwide.",
   },
   alternates: {
-    canonical: "https://etomidateshop.com",
+    canonical: "https://weedlaps.com",
   },
   robots: {
     index: true,
@@ -76,10 +64,10 @@ export default async function Home() {
     const siteSettings = {
       announcement: "",
       heroSubtitle: "",
-      siteName: "EtomidateShop",
+      siteName: "WeedLaps",
       tagline: "",
     };
-    return <HomeClient products={[]} siteSettings={siteSettings} />;
+    return <HomePage products={[]} siteSettings={siteSettings} />;
   }
   const productsRaw = await Product.find({}).lean();
   const products = productsRaw.map((p) => ({
@@ -88,6 +76,8 @@ export default async function Home() {
     slug: p.slug || "",
     price: p.price || 0,
     category: p.category || "",
+    strainType: p.strainType || "",
+    grade: p.grade || "",
     shortDescription: p.shortDescription || "",
     description: p.description || "",
     specifications: p.specifications || [],
@@ -100,9 +90,9 @@ export default async function Home() {
   const siteSettings = {
     announcement: raw?.announcement || "",
     heroSubtitle: raw?.heroSubtitle || "",
-    siteName: raw?.siteName || "EtomidateShop",
+    siteName: raw?.siteName || "WeedLaps",
     tagline: raw?.tagline || "",
   };
 
-  return <HomeClient products={products} siteSettings={siteSettings} />;
+  return <HomePage products={products} siteSettings={siteSettings} />;
 }

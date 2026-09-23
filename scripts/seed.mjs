@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/etomidate";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/weedlaps";
 
 // ─── Inline schemas (can't use Next.js aliases in standalone script) ───
 
@@ -15,6 +15,8 @@ const ProductSchema = new mongoose.Schema({
   name: String,
   price: Number,
   category: String,
+  strainType: String,
+  grade: String,
   shortDescription: String,
   description: String,
   specifications: [String],
@@ -48,92 +50,101 @@ const Admin = mongoose.models.Admin || mongoose.model("Admin", AdminSchema);
 
 const products = [
   {
-    slug: "etomidate-powder",
-    name: "Etomidate Powder",
-    price: 150.0,
-    category: "powder",
-    shortDescription:
-      "Pharmaceutical-grade etomidate powder, 99.8% purity. Ideal for research and compounding.",
-    description:
-      "Our Etomidate Powder is sourced directly from certified laboratories and undergoes rigorous third-party testing to guarantee 99.8%+ purity. Each batch is sealed in moisture-resistant packaging to preserve potency. Available in 5g, 25g, and 100g quantities. Certificate of Analysis (COA) included with every order.",
-    specifications: [
-      "Purity: ≥99.8%",
-      "Form: Fine crystalline powder",
-      "CAS Number: 33125-97-2",
-      "Molecular Formula: C₁₄H₁₆N₂O₂",
-      "Storage: Cool, dry place away from light",
-    ],
-    sizes: [
-      { label: "5g", price: 150 },
-      { label: "25g", price: 600 },
-      { label: "100g", price: 2000 },
-    ],
-    inStock: true,
-    image: "/images/powder.jpg",
-  },
-  {
-    slug: "etomidate-kpods",
-    name: "Etomidate K-Pods (Vape)",
+    slug: "og-kush-flower",
+    name: "OG Kush — Premium Flower",
     price: 45.0,
-    category: "vape",
+    category: "powder",
+    strainType: "indica",
+    grade: "AAAA",
     shortDescription:
-      "Pre-filled etomidate vape pods — smooth, discreet, and ready to use. Compatible with most pod systems.",
+      "Legendary indica-dominant hybrid. Dense, frosty buds with earthy pine and citrus notes. 24% THC.",
     description:
-      "Etomidate K-Pods deliver a precise, consistent dose in a sleek vape format. Each pod is pre-filled with lab-tested etomidate e-liquid and sealed for freshness. The ceramic coil ensures smooth vapor with no harsh burn. Sold individually or in packs of 3 and 5.",
+      "Our OG Kush is grown indoors by craft cultivators and hand-trimmed to perfection. Expect dense, resin-coated buds with the classic earthy pine aroma and hints of citrus. This indica-dominant hybrid delivers deep relaxation and euphoria — perfect for evening use. Every batch is third-party lab tested for potency, pesticides, and heavy metals.",
     specifications: [
-      "Volume: 1ml per pod",
-      "Concentration: Standard formulation",
-      "Coil: Ceramic mesh",
-      "Compatibility: Universal 510 & proprietary pod systems",
-      "Puffs: ~300 per pod",
+      "THC: 24%",
+      "Type: Indica-dominant hybrid",
+      "Aroma: Earthy pine, citrus, fuel",
+      "Effects: Relaxing, euphoric, sleepy",
+      "Lab tested: pesticides & heavy metals free",
     ],
     sizes: [
-      { label: "1 Pod", price: 45 },
-      { label: "3-Pack", price: 120 },
-      { label: "5-Pack", price: 185 },
+      { label: "3.5g (Eighth)", price: 45 },
+      { label: "7g (Quarter)", price: 80 },
+      { label: "14g (Half Oz)", price: 145 },
+      { label: "28g (Ounce)", price: 260 },
     ],
     inStock: true,
-    image: "/images/kpods.jpg",
+    image: "/images/flower.jpg",
   },
   {
-    slug: "etomidate-liquid",
-    name: "Etomidate Liquid Solution",
-    price: 200.0,
-    category: "liquid",
+    slug: "blue-dream-flower",
+    name: "Blue Dream — Premium Flower",
+    price: 40.0,
+    category: "powder",
+    strainType: "sativa",
+    grade: "AAA",
     shortDescription:
-      "Ready-to-use etomidate liquid solution — lab-tested, precisely dosed, and sealed for safety.",
+      "Classic sativa-dominant hybrid. Sweet berry aroma with balanced, uplifting effects. 21% THC.",
     description:
-      "Our Etomidate Liquid Solution is prepared under strict laboratory conditions with pharmaceutical-grade solvents. Every vial is individually sealed, labeled with lot number, and ships with a Certificate of Analysis. Perfect for researchers and licensed practitioners who need a ready-to-use formulation.",
+      "Blue Dream is a beloved sativa-dominant hybrid known for its sweet blueberry aroma and smooth, balanced high. Great for daytime use — uplifting and creative without heavy sedation. Grown organically, slow-cured for 30 days, and lab tested for purity and potency.",
     specifications: [
-      "Concentration: 2 mg/ml (standard)",
-      "Volume: 10ml / 50ml / 100ml",
-      "Solvent: Propylene glycol base",
-      "Appearance: Clear, colorless to pale yellow",
-      "Storage: Refrigerate after opening",
+      "THC: 21%",
+      "Type: Sativa-dominant hybrid",
+      "Aroma: Sweet berry, herbal",
+      "Effects: Uplifting, creative, focused",
+      "Lab tested: pesticides & heavy metals free",
     ],
     sizes: [
-      { label: "10ml Vial", price: 200 },
-      { label: "50ml Vial", price: 850 },
-      { label: "100ml Vial", price: 1500 },
+      { label: "3.5g (Eighth)", price: 40 },
+      { label: "7g (Quarter)", price: 72 },
+      { label: "14g (Half Oz)", price: 130 },
+      { label: "28g (Ounce)", price: 235 },
     ],
     inStock: true,
-    image: "/images/liquid.jpg",
+    image: "/images/flower2.jpg",
+  },
+  {
+    slug: "pink-wagyu-flower",
+    name: "Pink Wagyu — Craft Flower",
+    price: 55.0,
+    category: "powder",
+    strainType: "hybrid",
+    grade: "AAAA+",
+    shortDescription:
+      "Limited craft drop. Gassy, sweet and heavy-hitting with a smooth, creamy finish. 27% THC.",
+    description:
+      "Pink Wagyu is a small-batch craft strain grown in living soil and cold-cured for six weeks. Expect rock-hard, trichome-drenched buds with a gassy-sweet nose and a creamy exhale. The high hits fast — euphoric up front, settling into a warm, full-body melt. Very limited quantities.",
+    specifications: [
+      "THC: 27%",
+      "Type: Hybrid (indica-leaning)",
+      "Aroma: Gas, sweet cream, earth",
+      "Effects: Euphoric, relaxing, heavy",
+      "Lab tested: pesticides & heavy metals free",
+    ],
+    sizes: [
+      { label: "3.5g (Eighth)", price: 55 },
+      { label: "7g (Quarter)", price: 100 },
+      { label: "14g (Half Oz)", price: 185 },
+      { label: "28g (Ounce)", price: 340 },
+    ],
+    inStock: true,
+    image: "/images/flower3.jpg",
   },
 ];
 
 const settings = {
   key: "main",
-  siteName: "BuyEtomidateOnline",
-  tagline: "Premium Etomidate Products — Trusted Worldwide",
+  siteName: "WeedLaps",
+  tagline: "Premium Cannabis Flower — Trusted Worldwide",
   heroSubtitle:
-    "We supply pharmaceutical-grade etomidate powder, K-Pods vape, and liquid solutions to researchers and licensed buyers across the globe. Fast, discreet shipping with every order.",
-  contactEmail: "orders@buyetomidateonline.com",
+    "We supply premium cannabis flower — indica, sativa and hybrid strains — to customers across the globe. Fast, discreet shipping with every order.",
+  contactEmail: "orders@weedlaps.com",
   contactPhone: "+1 (555) 902-4481",
   shippingNote:
-    "All orders are shipped within 24 hours via tracked, discreet packaging. International delivery available.",
+    "All orders ship in plain, smell-proof packaging with tracking. Delivery times vary by destination.",
   aboutText:
-    "BuyEtomidateOnline has been a trusted name in the research chemical industry since 2019. We work directly with GMP-certified laboratories to source only the highest-purity etomidate products. Our team includes licensed chemists and logistics specialists who ensure every order meets strict quality and safety standards before it leaves our facility.",
-  announcement: "Free shipping on orders over $500 — limited time offer!",
+    "WeedLaps has been a trusted name in the cannabis industry since 2019. We work directly with craft growers and licensed producers to source only the highest-quality cannabis products. Every batch is third-party lab tested for potency, pesticides, and heavy metals before it reaches your door.",
+  announcement: "Discreet, tracked delivery on every order — worldwide.",
 };
 
 // ─── Run Seed ───

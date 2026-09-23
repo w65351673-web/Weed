@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FiUser, FiLock, FiLogIn, FiLoader, FiAlertCircle } from "react-icons/fi";
-import { GiChemicalDrop } from "react-icons/gi";
+import CannabisIcon from "@/components/CannabisIcon";
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState("");
@@ -45,11 +45,11 @@ export default function AdminLoginPage() {
         className="w-full max-w-sm"
       >
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-[#00d4aa]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <GiChemicalDrop className="w-7 h-7 text-[#00d4aa]" />
+          <div className="w-14 h-14 bg-[#4ade80]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <CannabisIcon className="w-7 h-7 text-[#4ade80]" />
           </div>
           <h1 className="text-2xl font-extrabold text-gray-900">Admin Login</h1>
-          <p className="text-sm text-gray-600 mt-1">EtomidateShop Dashboard</p>
+          <p className="text-sm text-gray-600 mt-1">WeedLaps Dashboard</p>
         </div>
 
         <form onSubmit={handleLogin} className="bg-gray-100 rounded-2xl border border-gray-200 p-6 space-y-4">
@@ -73,7 +73,7 @@ export default function AdminLoginPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
-                className="w-full bg-white border border-gray-200 text-gray-900 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d4aa] focus:border-transparent placeholder:text-gray-600"
+                className="w-full bg-white border border-gray-200 text-gray-900 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4ade80] focus:border-transparent placeholder:text-gray-600"
                 placeholder="admin"
               />
             </div>
@@ -88,7 +88,7 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-white border border-gray-200 text-gray-900 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d4aa] focus:border-transparent placeholder:text-gray-600"
+                className="w-full bg-white border border-gray-200 text-gray-900 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4ade80] focus:border-transparent placeholder:text-gray-600"
                 placeholder="••••••••"
               />
             </div>
@@ -97,7 +97,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-[#00d4aa] hover:bg-[#059669] disabled:bg-[#059669]/50 text-black font-semibold py-3 rounded-lg transition-all hover:shadow-lg hover:shadow-[#00d4aa]/25"
+            className="w-full flex items-center justify-center gap-2 bg-[#4ade80] hover:bg-[#22c55e] disabled:bg-[#22c55e]/50 text-black font-semibold py-3 rounded-lg transition-all hover:shadow-lg hover:shadow-[#4ade80]/25"
           >
             {loading ? (
               <FiLoader className="w-5 h-5 animate-spin" />

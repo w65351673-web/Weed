@@ -7,7 +7,7 @@ export async function POST(request) {
   try {
     await dbConnect();
     const body = await request.json();
-    const { name, email, subject, message } = body;
+    const { name, email, phone, subject, message } = body;
 
     if (!name || !email || !message) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -21,7 +21,9 @@ export async function POST(request) {
     });
 
     // Send email notification (non-blocking)
-    sendContactNotification({ name, email, subject, message }).catch(() => {});
+    sendContactNotification({ name, email, phone, subject, message }).catch((err) => {
+      console.error("[CONTACT EMAIL ERROR]", err.message);
+    });
 
     return NextResponse.json({ success: true }, { status: 201 });
   } catch {

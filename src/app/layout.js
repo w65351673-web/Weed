@@ -1,5 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
+import { Plus_Jakarta_Sans, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,125 +6,79 @@ import ToastProvider from "@/components/ToastProvider";
 import SocialFloat from "@/components/SocialFloat";
 import ImageProtection from "@/components/ImageProtection";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata = {
-  metadataBase: new URL("https://etomidateshop.com"),
+  metadataBase: new URL("https://weedlaps.com"),
   title: {
-    default: "Etomidate Shop — Premium Powder, K-Pods Vape & Liquid | EtomidateShop.com",
-    template: "%s | EtomidateShop.com",
+    default: "WeedLaps — Premium Cannabis Flower | WeedLaps.com",
+    template: "%s | WeedLaps.com",
   },
   description:
-    "EtomidateShop.com — Premium etomidate powder, K-Pods vape cartridges & liquid solutions. Lab-tested ≥99.8% purity. COA certified, discreet worldwide shipping within 24h.",
+    "WeedLaps.com — Premium cannabis flower. Indica, sativa & hybrid strains, independently lab tested and shipped discreetly worldwide.",
   keywords: [
-    "buy etomidate online",
-    "etomidate for sale",
-    "order etomidate",
-    "etomidate shop",
-    "etomidate store",
-    "etomidate powder",
-    "buy etomidate powder",
-    "etomidate powder for sale",
-    "pure etomidate powder",
-    "pharmaceutical grade etomidate powder",
-    "etomidate vape",
-    "etomidate vape pods",
-    "etomidate K-Pods",
-    "buy etomidate K-Pods",
-    "etomidate vape cartridge",
-    "etomidate disposable vape",
-    "etomidate liquid solution",
-    "buy etomidate liquid",
-    "etomidate liquid for sale",
-    "etomidate",
-    "etomidate supplier",
-    "etomidate vendor",
-    "pharmaceutical grade etomidate",
-    "research grade etomidate",
-    "lab tested etomidate",
-    "etomidate 99.8 purity",
-    "etomidate COA certified",
-    "HPLC tested etomidate",
-    "discreet etomidate shipping",
-    "etomidate worldwide delivery",
-    "etomidate bulk order",
-    "etomidate wholesale",
-    "etomidate research chemical",
-    "etomidate anesthetic compound",
-    "etomidate 33125-97-2",
-    "33125-97-2",
-    "CAS 33125-97-2",
-    "CAS number 33125-97-2",
-    "buy 33125-97-2",
-    "33125-97-2 for sale",
-    "33125-97-2 powder",
-    "33125-97-2 buy online",
-    "etomidate CAS number",
-    "zombie vape",
-    "buy zombie vape",
-    "zombie vape pods",
-    "zombie K-Pod",
-    "piao piao vape",
-    "buy piao piao vape",
-    "piao piao pods",
-    "piao piao K-Pod",
-    "cychlorphine",
-    "cychlorphine HCL",
-    "cychlorphine HCL powder",
-    "buy cychlorphine HCL",
-    "cychlorphine 16145-71-4",
-    "16145-71-4",
-    "CAS 16145-71-4",
-    "buy 16145-71-4",
-    "16145-71-4 powder",
-    "16145-71-4 for sale",
-    "EtomidateShop",
-    "etomidateshop.com",
-    "space oil",
-    "buy space oil",
-    "space oil vape",
-    "space oil pods",
-    "etomidate e-liquid",
-    "etomidate e-liquids",
-    "etomidate flavours",
-    "etomidate flavored pods",
-    "etomidate menthol pods",
-    "etomidate oil",
-    "etomidate oil for sale",
-    "etomidate drops",
-    "etomidate solution drops",
-    "etomidate nasal spray",
-    "etomidate oral solution",
-    "etomidate concentrate",
-    "space pods",
-    "research chemical vape",
-    "pharmaceutical vape pods",
+    "buy weed online",
+    "cannabis for sale",
+    "order cannabis online",
+    "weed shop",
+    "cannabis store",
+    "buy cannabis flower",
+    "premium cannabis flower",
+    "weed flower for sale",
+    "indica flower",
+    "sativa flower",
+    "hybrid strains",
+    "AAAA weed",
+    "craft cannabis",
+    "lab tested cannabis",
+    "premium cannabis",
+    "top shelf weed",
+    "discreet weed shipping",
+    "cannabis worldwide delivery",
+    "weed bulk order",
+    "cannabis wholesale",
+    "buy marijuana online",
+    "marijuana for sale",
+    "mail order marijuana",
+    "online dispensary",
+    "cannabis dispensary online",
+    "WeedLaps",
+    "weedlaps.com",
+    "weed strains",
+    "high THC flower",
+    "organic cannabis",
+    "cannabis delivery",
+    "420 shop",
+    "buy bud online",
   ],
-  authors: [{ name: "EtomidateShop.com" }],
-  creator: "EtomidateShop.com",
-  publisher: "EtomidateShop.com",
+  authors: [{ name: "WeedLaps.com" }],
+  creator: "WeedLaps.com",
+  publisher: "WeedLaps.com",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://etomidateshop.com",
-    siteName: "EtomidateShop.com",
-    title: "Etomidate Shop — Premium Powder, K-Pods Vape & Liquid",
+    url: "https://weedlaps.com",
+    siteName: "WeedLaps.com",
+    title: "WeedLaps — Premium Cannabis Flower",
     description:
-      "EtomidateShop.com — Premium etomidate powder, K-Pods vape cartridges & liquid. ≥99.8% purity, COA included, discreet worldwide shipping.",
+      "WeedLaps.com — Premium cannabis flower. Indica, sativa & hybrid strains, independently lab tested and shipped discreetly worldwide.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Etomidate Shop — Premium Powder, Vape & Liquid",
+    title: "WeedLaps — Premium Cannabis Flower",
     description:
-      "EtomidateShop.com — Premium etomidate powder, K-Pods vape cartridges & liquid. Lab-tested ≥99.8% purity. Ships worldwide within 24h.",
+      "WeedLaps.com — Premium cannabis flower. Indica, sativa & hybrid strains, lab tested and shipped discreetly worldwide.",
   },
   robots: {
     index: true,
@@ -139,14 +92,11 @@ export const metadata = {
     },
   },
   alternates: {
-    canonical: "https://etomidateshop.com",
+    canonical: "https://weedlaps.com",
   },
   icons: {
     icon: "/favicon.svg",
     apple: "/favicon.svg",
-  },
-  verification: {
-    google: "6uz5n6ngf_ozH4xgFtl0Clt_Tm2OBYScFmgYVpqS5gk",
   },
 };
 
@@ -154,25 +104,10 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${jakarta.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              var _smartsupp = _smartsupp || {};
-              _smartsupp.key = '55db5e397b21255505ad00239a6a0de5ff43ae1e';
-              window.smartsupp||(function(d) {
-                var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-                s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-                c.type='text/javascript';c.charset='utf-8';c.async=true;
-                c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-              })(document);
-            `,
-          }}
-        />
-      </head>
-      <body className="min-h-full flex flex-col">
+      <head></head>
+      <body className="min-h-full flex flex-col bg-cream text-ink font-sans">
         <ImageProtection />
         <ToastProvider />
         <Navbar />

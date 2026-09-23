@@ -1,7 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
-  <rect width="48" height="48" rx="10" fill="#ffffff"/>
-  <path d="M24 4L36 12V28L24 36L12 28V12Z" stroke="#00d4aa" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M24 8L32 13V26L24 31L16 26V13Z" fill="#00d4aa" opacity="0.4"/>
-  <path d="M24 14L20 17V23L24 26L28 23V17Z" fill="#00d4aa" opacity="0.9"/>
-  <circle cx="19" cy="15" r="1.5" fill="#ffffff" opacity="0.8"/>
+  <defs>
+    <path id="leaflet" d="M0 0 C3.6 -5.5 3.4 -12.5 0 -19 C-3.4 -12.5 -3.6 -5.5 0 0 Z"/>
+  </defs>
+  <rect width="48" height="48" rx="12" fill="#1f3a2b"/>
+  <g transform="translate(24 32)" fill="#e6d3a3">
+    <use href="#leaflet" transform="scale(1.05 1.2)"/>
+    <use href="#leaflet" transform="rotate(-30) scale(0.95 1.02)"/>
+    <use href="#leaflet" transform="rotate(30) scale(0.95 1.02)"/>
+    <use href="#leaflet" transform="rotate(-62) scale(0.8 0.78)"/>
+    <use href="#leaflet" transform="rotate(62) scale(0.8 0.78)"/>
+    <use href="#leaflet" transform="rotate(-92) scale(0.6 0.5)"/>
+    <use href="#leaflet" transform="rotate(92) scale(0.6 0.5)"/>
+  </g>
+  <path d="M24 32 L24 40" stroke="#c8a24a" stroke-width="1.6" stroke-linecap="round"/>
 </svg>

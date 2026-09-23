@@ -4,15 +4,19 @@ import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import { FaFlask, FaVial, FaTint, FaAppleAlt } from "react-icons/fa";
-import { FiCheckCircle, FiUser, FiMail, FiMapPin, FiMessageSquare, FiShoppingBag, FiChevronRight, FiLoader, FiArrowLeft, FiPackage, FiShield, FiTruck } from "react-icons/fi";
+import CannabisIcon from "@/components/CannabisIcon";
+import { CATEGORIES, CategoryIcon, categoryLabel } from "@/lib/categories";
+import { FiCheck, FiUser, FiMail, FiMapPin, FiMessageSquare, FiShoppingBag, FiChevronRight, FiLoader, FiArrowLeft, FiPackage, FiShield, FiTruck, FiLock } from "react-icons/fi";
+import { FaBitcoin, FaTelegramPlane, FaWhatsapp } from "react-icons/fa";
 
-const categoryIcons = {
-  powder: <FaFlask className="w-10 h-10 text-[#00d4aa]" />,
-  vape: <FaVial className="w-10 h-10 text-[#00d4aa]" />,
-  liquid: <FaTint className="w-10 h-10 text-[#00d4aa]" />,
-  flavours: <FaAppleAlt className="w-10 h-10 text-[#00d4aa]" />,
-};
+const inputCls =
+  "w-full bg-cream border border-sand text-ink rounded-2xl pl-11 pr-4 py-3.5 text-sm transition-colors placeholder:text-bark/40 focus:outline-none focus:border-moss focus:bg-paper focus:ring-4 focus:ring-moss/10";
+const labelCls = "block text-[11px] font-semibold text-bark/70 uppercase tracking-[0.18em] mb-2";
+const iconCls = "absolute left-4 top-4 w-4 h-4 text-bark/40";
+
+// TODO: replace with the real WhatsApp business number (country code + number, digits only)
+const WHATSAPP_NUMBER = "15559024481";
+const TELEGRAM_URL = "https://t.me/chemsolution12mal";
 
 export default function OrderPage() {
   const { slug } = useParams();
@@ -23,6 +27,7 @@ export default function OrderPage() {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", address: "", message: "" });
+  const [method, setMethod] = useState("form");
 
   useEffect(() => {
     fetch("/api/products")
@@ -43,18 +48,27 @@ export default function OrderPage() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-24 text-center">
-        <FiLoader className="w-8 h-8 text-[#00d4aa] animate-spin mx-auto mb-3" />
-        <p className="text-gray-500">Loading...</p>
+      <div className="max-w-7xl mx-auto px-4 py-32 text-center">
+        <CannabisIcon className="w-12 h-12 text-moss animate-sway mx-auto mb-4" />
+        <p className="font-display text-xl text-forest">Preparing your order&hellip;</p>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-24 text-center">
-        <h1 className="text-2xl font-bold mb-4 text-gray-900">Product Not Found</h1>
-        <Link href="/shop" className="text-[#00d4aa] hover:underline">Back to Shop</Link>
+      <div className="max-w-7xl mx-auto px-4 py-32 text-center">
+        <div className="mx-auto w-20 h-20 blob-shape bg-sand flex items-center justify-center text-moss">
+          <CannabisIcon className="w-10 h-10" />
+        </div>
+        <h1 className="mt-6 font-display text-4xl text-forest">We couldn&apos;t find that one</h1>
+        <p className="mt-2 text-bark/70">It may have sold out or moved. Take a look at the rest of the menu.</p>
+        <Link
+          href="/shop"
+          className="mt-8 inline-flex items-center gap-2 rounded-full bg-forest px-7 py-3.5 font-semibold text-cream hover:bg-moss transition-colors"
+        >
+          Back to the shop
+        </Link>
       </div>
     );
   }
@@ -92,36 +106,57 @@ export default function OrderPage() {
 
   const currentPrice = product.sizes?.[selectedSize]?.price || product.price || 0;
 
+  const orderText = `Hi! I'd like to order:\n\n${product.name} — ${product.sizes?.[selectedSize]?.label || "Standard"}\nTotal: €${currentPrice.toFixed(2)}\n\nName:\nDelivery address:`;
+
+  const chatChannel =
+    method === "whatsapp"
+      ? { name: "WhatsApp", Icon: FaWhatsapp, href: `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}` }
+      : { name: "Telegram", Icon: FaTelegramPlane, href: TELEGRAM_URL };
+
+  const copyOrder = async () => {
+    try {
+      await navigator.clipboard.writeText(orderText);
+      toast.success(`Order details copied — paste them in ${chatChannel.name}`);
+    } catch {
+      toast.error("Couldn't copy — please type your order manually");
+    }
+  };
+
   if (orderPlaced) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="min-h-[70vh] paper-grain flex items-center justify-center px-4 py-20">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="max-w-lg w-full text-center"
         >
-          <div className="bg-white border border-gray-200 rounded-3xl p-10 shadow-sm">
-            <div className="w-20 h-20 bg-[#00d4aa]/10 rounded-full flex items-center justify-center mx-auto mb-5">
-              <FiCheckCircle className="w-10 h-10 text-[#00d4aa]" />
-            </div>
-            <h1 className="text-2xl font-extrabold text-gray-900 mb-2">Order Confirmed!</h1>
-            <p className="text-gray-500 mb-2">
-              Thank you, <span className="font-semibold text-gray-800">{form.name}</span>.
-            </p>
-            <p className="text-gray-500 mb-6">
+          <div className="relative overflow-hidden bg-paper border border-sand rounded-[36px] p-10 md:p-12 shadow-[0_30px_60px_-30px_rgba(31,58,43,0.35)]">
+            <CannabisIcon className="absolute -right-10 -top-10 w-40 h-40 text-moss/[0.06]" />
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", delay: 0.15 }}
+              className="w-20 h-20 bg-forest text-gold-soft rounded-full flex items-center justify-center mx-auto mb-6"
+            >
+              <FiCheck className="w-10 h-10" />
+            </motion.div>
+            <p className="text-[11px] uppercase tracking-[0.25em] text-clay">Order received</p>
+            <h1 className="mt-2 font-display text-4xl text-forest">Thank you, {form.name.split(" ")[0]}!</h1>
+            <p className="mt-4 text-bark/75 leading-relaxed">
               Your order for{" "}
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-forest">
                 {product.name} — {product.sizes?.[selectedSize]?.label || "Standard"}
               </span>{" "}
-              has been received. Payment instructions will be sent to{" "}
-              <span className="font-semibold text-gray-800">{form.email}</span>.
+              is in. We'll email{" "}
+              <span className="font-semibold text-forest">{form.email}</span>{" "}
+              our Bitcoin wallet address and the exact BTC amount to complete your order.
             </p>
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 bg-[#00d4aa] hover:bg-[#00b894] text-black font-bold px-8 py-3 rounded-xl transition-all shadow-sm hover:shadow-md"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-forest px-8 py-3.5 font-semibold text-cream hover:bg-moss transition-colors"
             >
               <FiShoppingBag className="w-4 h-4" />
-              Continue Shopping
+              Keep browsing
             </Link>
           </div>
         </motion.div>
@@ -129,187 +164,264 @@ export default function OrderPage() {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  const tint = CATEGORIES[product.category]?.tint || "bg-sand";
 
+  return (
+    <div className="min-h-screen paper-grain">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-sm text-gray-500 mb-6">
-          <Link href="/" className="hover:text-[#00d4aa] transition-colors">Home</Link>
-          <FiChevronRight className="w-3 h-3" />
-          <Link href="/shop" className="hover:text-[#00d4aa] transition-colors">Shop</Link>
-          <FiChevronRight className="w-3 h-3" />
-          <Link href={`/shop/${product.slug}`} className="hover:text-[#00d4aa] transition-colors truncate max-w-[120px]">{product.name}</Link>
-          <FiChevronRight className="w-3 h-3" />
-          <span className="text-[#00d4aa] font-medium">Order</span>
+        <nav className="flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-bark/60 overflow-hidden">
+          <Link href="/" className="hover:text-forest transition-colors shrink-0">Home</Link>
+          <FiChevronRight className="w-3 h-3 shrink-0" />
+          <Link href="/shop" className="hover:text-forest transition-colors shrink-0">Shop</Link>
+          <FiChevronRight className="w-3 h-3 shrink-0" />
+          <Link href={`/shop/${product.slug}`} className="hover:text-forest transition-colors truncate max-w-[160px]">{product.name}</Link>
+          <FiChevronRight className="w-3 h-3 shrink-0" />
+          <span className="text-clay shrink-0">Checkout</span>
         </nav>
 
-        {/* Back link */}
-        <Link href={`/shop/${product.slug}`} className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#00d4aa] transition-colors mb-6">
-          <FiArrowLeft className="w-3.5 h-3.5" />
-          Back to product
-        </Link>
+        <div className="mt-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <h1 className="font-display text-4xl md:text-5xl text-forest">
+            Almost <em className="text-moss">yours</em>
+          </h1>
+          <Link
+            href={`/shop/${product.slug}`}
+            className="inline-flex items-center gap-1.5 text-sm text-bark/70 hover:text-forest transition-colors"
+          >
+            <FiArrowLeft className="w-3.5 h-3.5" />
+            Back to product
+          </Link>
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="space-y-6"
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8"
         >
-          {/* Product Summary Card */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
-                {product.image ? (
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-                ) : (
-                  categoryIcons[product.category]
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-[#00d4aa] uppercase tracking-wider mb-0.5 capitalize">{product.category}</p>
-                <h1 className="text-lg font-extrabold text-gray-900 leading-tight">{product.name}</h1>
-              </div>
-              <div className="text-right shrink-0">
-                <p className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">Total</p>
-                <p className="text-2xl font-extrabold text-[#00d4aa]">€{currentPrice.toFixed(2)}</p>
-              </div>
-            </div>
-
-            {/* Selected quantity row */}
-            <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-              <span className="text-sm text-gray-500">Selected quantity</span>
-              <span className="text-sm font-bold text-gray-900 bg-[#00d4aa]/10 text-[#00b894] px-3 py-1 rounded-full">
-                {product.sizes?.[selectedSize]?.label || "Standard"}
-              </span>
-            </div>
-          </div>
-
-          {/* Quantity Selector */}
-          {product.sizes?.length > 0 && (
-            <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">
-                Choose Quantity
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {product.sizes.map((size, i) => (
+          {/* Form */}
+          <div className="lg:col-span-7 order-2 lg:order-1">
+            <div className="rounded-[32px] bg-paper border border-sand p-6 md:p-10">
+              <p className={labelCls}>How would you like to order?</p>
+              <div className="mt-3 grid grid-cols-3 gap-2.5">
+                {[
+                  { id: "form", icon: FiMail, title: "Order form", desc: "We email payment info" },
+                  { id: "telegram", icon: FaTelegramPlane, title: "Telegram", desc: "Fastest response" },
+                  { id: "whatsapp", icon: FaWhatsapp, title: "WhatsApp", desc: "Chat & order" },
+                ].map((m) => (
                   <button
-                    key={size.label}
-                    onClick={() => setSelectedSize(i)}
-                    className={`px-4 py-3.5 rounded-xl border text-sm font-medium transition-all text-center ${
-                      selectedSize === i
-                        ? "bg-[#00d4aa] text-black border-[#00d4aa] shadow-sm"
-                        : "bg-white text-gray-700 border-gray-200 hover:border-[#00d4aa] hover:bg-[#00d4aa]/5"
+                    key={m.id}
+                    type="button"
+                    onClick={() => setMethod(m.id)}
+                    className={`rounded-2xl border px-4 py-3.5 text-left transition-all ${
+                      method === m.id ? "border-forest bg-forest text-cream" : "border-sand bg-cream text-forest hover:border-forest/40"
                     }`}
                   >
-                    <span className="block font-bold">{size.label}</span>
-                    <span className={`text-sm mt-0.5 block ${selectedSize === i ? "text-black/70" : "text-[#00b894]"}`}>€{size.price.toFixed(2)}</span>
+                    <m.icon className={`w-4 h-4 ${method === m.id ? "text-gold-soft" : "text-moss"}`} />
+                    <span className="mt-1.5 block font-semibold text-sm">{m.title}</span>
+                    <span className={`block text-[11px] mt-0.5 ${method === m.id ? "text-cream/70" : "text-bark/60"}`}>{m.desc}</span>
                   </button>
                 ))}
               </div>
-            </div>
-          )}
 
-          {/* Order Form */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-            <h3 className="flex items-center gap-2 text-lg font-extrabold text-gray-900 mb-6">
-              <FiUser className="w-5 h-5 text-[#00d4aa]" />
-              Your Details
-            </h3>
-
-            <form onSubmit={handleOrder} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Full Name</label>
-                <div className="relative">
-                  <FiUser className="absolute left-3.5 top-3 w-4 h-4 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="John Doe"
-                    required
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d4aa] focus:border-transparent placeholder:text-gray-400"
-                  />
+              {method !== "form" ? (
+                <div className="mt-8 space-y-5">
+                  <div className="rounded-2xl border border-sand bg-cream p-5">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-bark/60">Your order</p>
+                    <p className="mt-2 font-display text-xl text-forest">
+                      {product.name} — {product.sizes?.[selectedSize]?.label || "Standard"}
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-moss">€{currentPrice.toFixed(2)} · Bitcoin (BTC) only</p>
+                  </div>
+                  <p className="text-sm text-bark/70 leading-relaxed">
+                    Send us a message on {chatChannel.name} with this product, your chosen amount and your delivery address — we'll confirm your order and send the Bitcoin payment details right away.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button
+                      type="button"
+                      onClick={copyOrder}
+                      className="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-forest/30 bg-cream px-6 py-3.5 font-semibold text-forest hover:border-forest transition-colors"
+                    >
+                      <FiPackage className="w-4 h-4" />
+                      Copy order details
+                    </button>
+                    <a
+                      href={chatChannel.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-forest px-6 py-3.5 font-semibold text-cream hover:bg-moss transition-colors"
+                    >
+                      <chatChannel.Icon className="w-4 h-4" />
+                      Open {chatChannel.name}
+                    </a>
+                  </div>
                 </div>
+              ) : (
+              <form onSubmit={handleOrder} className="mt-8">
+              <div className="flex items-center gap-3">
+                <span className="w-9 h-9 rounded-full bg-forest text-cream font-display flex items-center justify-center">1</span>
+                <h2 className="font-display text-2xl text-forest">Your details</h2>
               </div>
+              <p className="mt-2 text-sm text-bark/65 pl-12">We only use these to ship your order and send payment instructions.</p>
 
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Email Address</label>
-                <div className="relative">
-                  <FiMail className="absolute left-3.5 top-3 w-4 h-4 text-gray-400" />
-                  <input
-                    type="email"
-                    placeholder="john@example.com"
-                    required
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d4aa] focus:border-transparent placeholder:text-gray-400"
-                  />
+              <div className="mt-8 space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className={labelCls}>Full name</label>
+                    <div className="relative">
+                      <FiUser className={iconCls} />
+                      <input
+                        type="text"
+                        placeholder="Jane Doe"
+                        required
+                        value={form.name}
+                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                        className={inputCls}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelCls}>Email address</label>
+                    <div className="relative">
+                      <FiMail className={iconCls} />
+                      <input
+                        type="email"
+                        placeholder="jane@example.com"
+                        required
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                        className={inputCls}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Shipping Address</label>
-                <div className="relative">
-                  <FiMapPin className="absolute left-3.5 top-3 w-4 h-4 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="123 Main St, Berlin, Germany"
-                    required
-                    value={form.address}
-                    onChange={(e) => setForm({ ...form, address: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d4aa] focus:border-transparent placeholder:text-gray-400"
-                  />
+                <div>
+                  <label className={labelCls}>Shipping address</label>
+                  <div className="relative">
+                    <FiMapPin className={iconCls} />
+                    <input
+                      type="text"
+                      placeholder="123 Main St, Berlin, Germany"
+                      required
+                      value={form.address}
+                      onChange={(e) => setForm({ ...form, address: e.target.value })}
+                      className={inputCls}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Message <span className="text-gray-400 font-normal normal-case">(optional)</span></label>
-                <div className="relative">
-                  <FiMessageSquare className="absolute left-3.5 top-3 w-4 h-4 text-gray-400" />
-                  <textarea
-                    placeholder="Any special requests or questions..."
-                    rows={3}
-                    value={form.message}
-                    onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d4aa] focus:border-transparent placeholder:text-gray-400 resize-none"
-                  />
+                <div>
+                  <label className={labelCls}>
+                    Note <span className="normal-case tracking-normal font-normal text-bark/45">(optional)</span>
+                  </label>
+                  <div className="relative">
+                    <FiMessageSquare className={iconCls} />
+                    <textarea
+                      placeholder="Any special requests or questions..."
+                      rows={3}
+                      value={form.message}
+                      onChange={(e) => setForm({ ...form, message: e.target.value })}
+                      className={`${inputCls} resize-none`}
+                    />
+                  </div>
                 </div>
               </div>
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full flex items-center justify-center gap-2 bg-[#00d4aa] hover:bg-[#00b894] disabled:opacity-60 text-black font-bold py-4 rounded-xl transition-all hover:shadow-lg hover:shadow-[#00d4aa]/25 mt-2 text-base"
+                className="mt-8 w-full flex items-center justify-center gap-2 rounded-full bg-forest hover:bg-moss disabled:opacity-60 text-cream font-semibold py-4 text-base transition-colors"
               >
-                {submitting ? (
-                  <FiLoader className="w-5 h-5 animate-spin" />
-                ) : (
-                  <FiShoppingBag className="w-5 h-5" />
-                )}
-                {submitting ? "Placing Order..." : `Place Order — €${currentPrice.toFixed(2)}`}
+                {submitting ? <FiLoader className="w-5 h-5 animate-spin" /> : <FiLock className="w-4 h-4" />}
+                {submitting ? "Placing order..." : `Place order — €${currentPrice.toFixed(2)}`}
               </button>
-
-              <p className="text-xs text-gray-400 text-center">
-                Payment instructions will be sent to your email after confirmation.
-              </p>
-            </form>
-          </div>
-
-          {/* Trust badges */}
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { icon: FiShield, label: "Secure Order" },
-              { icon: FiTruck, label: "Discreet Shipping" },
-              { icon: FiPackage, label: "COA Included" },
-            ].map(({ icon: Icon, label }) => (
-              <div key={label} className="bg-white border border-gray-200 rounded-xl p-3 flex flex-col items-center gap-1.5 shadow-sm">
-                <Icon className="w-5 h-5 text-[#00d4aa]" />
-                <span className="text-xs font-semibold text-gray-600 text-center">{label}</span>
+              <div className="mt-5 flex items-start gap-3 rounded-2xl border border-gold/40 bg-gold-soft/20 px-4 py-3.5 text-left">
+                <FaBitcoin className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                <p className="text-xs leading-relaxed text-bark/80">
+                  <span className="font-semibold text-forest">Bitcoin (BTC) only.</span>{" "}
+                  We accept Bitcoin as our sole payment method. After you place your order, we'll email you the wallet address and exact BTC amount.
+                </p>
               </div>
-            ))}
+              </form>
+              )}
+            </div>
           </div>
 
+          {/* Summary */}
+          <aside className="lg:col-span-5 order-1 lg:order-2">
+            <div className="lg:sticky lg:top-36 space-y-5">
+              <div className="rounded-[32px] bg-paper border border-sand p-6">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-bark/60">Order summary</p>
+
+                <div className="mt-4 flex items-center gap-4">
+                  <div className={`w-20 h-20 rounded-2xl ${tint} flex items-center justify-center shrink-0 overflow-hidden text-moss`}>
+                    {product.image ? (
+                      <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <CategoryIcon category={product.category} className="w-9 h-9" />
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-clay">{categoryLabel(product.category)}</p>
+                    <p className="font-display text-xl leading-tight text-forest">{product.name}</p>
+                  </div>
+                </div>
+
+                {product.sizes?.length > 0 && (
+                  <div className="mt-6">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-bark/60 mb-3">Amount</p>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {product.sizes.map((size, i) => {
+                        const active = selectedSize === i;
+                        return (
+                          <button
+                            key={size.label}
+                            type="button"
+                            onClick={() => setSelectedSize(i)}
+                            className={`rounded-2xl border px-3 py-2.5 text-left text-sm transition-all ${
+                              active ? "border-forest bg-forest text-cream" : "border-sand bg-cream text-forest hover:border-forest/40"
+                            }`}
+                          >
+                            <span className="block font-semibold">{size.label}</span>
+                            <span className={`block ${active ? "text-gold-soft" : "text-moss"}`}>€{size.price.toFixed(2)}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                <dl className="mt-6 space-y-2.5 border-t border-dashed border-sand pt-5 text-sm">
+                  <div className="flex justify-between text-bark/75">
+                    <dt>Amount</dt>
+                    <dd>{product.sizes?.[selectedSize]?.label || "Standard"}</dd>
+                  </div>
+                  <div className="flex justify-between text-bark/75">
+                    <dt>Shipping</dt>
+                    <dd>Discreet &amp; tracked</dd>
+                  </div>
+                  <div className="flex justify-between items-end pt-3 border-t border-sand">
+                    <dt className="font-semibold text-forest">Total</dt>
+                    <dd className="font-display text-3xl text-forest">€{currentPrice.toFixed(2)}</dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { icon: FiShield, label: "Secure order" },
+                  { icon: FiTruck, label: "Discreet shipping" },
+                  { icon: FiPackage, label: "Lab-tested" },
+                ].map(({ icon: Icon, label }) => (
+                  <div key={label} className="rounded-2xl bg-paper border border-sand p-3 flex flex-col items-center gap-1.5 text-center">
+                    <Icon className="w-4 h-4 text-moss" />
+                    <span className="text-[11px] font-medium text-bark">{label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </aside>
         </motion.div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import dbConnect from "@/lib/mongodb";
 import Order from "@/models/Order";
 import { verifyToken } from "@/lib/auth";
 import { cookies } from "next/headers";
-import { sendOrderNotification } from "@/lib/mailer";
+import { sendOrderNotification, sendOrderConfirmation } from "@/lib/mailer";
 
 // POST — place a new order (public)
 export async function POST(request) {
@@ -29,9 +29,12 @@ export async function POST(request) {
       status: "pending",
     });
 
-    // Send email notification (non-blocking)
+    // Send email notifications (non-blocking): admin alert + customer confirmation
     sendOrderNotification(order).catch((err) => {
       console.error("[ORDER EMAIL ERROR]", err.message);
+    });
+    sendOrderConfirmation(order).catch((err) => {
+      console.error("[ORDER CONFIRMATION EMAIL ERROR]", err.message);
     });
 
     return NextResponse.json({ success: true, orderId: order.orderId }, { status: 201 });

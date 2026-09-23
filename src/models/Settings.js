@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const SettingsSchema = new mongoose.Schema(
   {
     key: { type: String, default: "main", unique: true },
-    siteName: { type: String, default: "EtomidateShop" },
-    tagline: { type: String, default: "Premium Etomidate Products — Trusted Worldwide" },
+    siteName: { type: String, default: "WeedLaps" },
+    tagline: { type: String, default: "Premium Cannabis Flower — Trusted Worldwide" },
     heroSubtitle: { type: String, default: "" },
     contactEmail: { type: String, default: "" },
     contactPhone: { type: String, default: "" },

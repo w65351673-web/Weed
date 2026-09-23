@@ -1,217 +1,232 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { FaFlask, FaVial, FaTint, FaAppleAlt } from "react-icons/fa";
-import { FiArrowRight, FiCheckCircle, FiXCircle, FiStar, FiFilter, FiShoppingBag, FiChevronRight, FiX } from "react-icons/fi";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiChevronRight, FiX, FiChevronDown } from "react-icons/fi";
+import CannabisIcon from "@/components/CannabisIcon";
+import ProductCard from "@/components/ProductCard";
+import { STRAINS, STRAIN_ORDER, normalizeStrain, startingPrice } from "@/lib/categories";
 
-const productIcons = {
-  powder: <FaFlask className="w-16 h-16 text-[#00d4aa]" />,
-  vape: <FaVial className="w-16 h-16 text-[#00d4aa]" />,
-  liquid: <FaTint className="w-16 h-16 text-[#00d4aa]" />,
-  "vape flavours": <FaAppleAlt className="w-16 h-16 text-[#00d4aa]" />,
-};
+const strainOf = (p) => normalizeStrain(p.strainType || p.name);
 
-const categoryInfo = {
-  powder: { label: "Powder / Crystal", icon: <FaFlask className="w-5 h-5" />, heading: "Etomidate Powder / Crystal", desc: "High-purity etomidate powder for research and clinical use." },
-  vape: { label: "Vape / K-Pods", icon: <FaVial className="w-5 h-5" />, heading: "Etomidate Vape / K-Pods", desc: "Precision-formulated etomidate vape cartridges and K-Pod systems." },
-  liquid: { label: "Liquid", icon: <FaTint className="w-5 h-5" />, heading: "Etomidate Liquid", desc: "Pharmaceutical-grade etomidate liquid solutions." },
-  "vape flavours": { label: "Vape Flavours", icon: <FaAppleAlt className="w-5 h-5" />, heading: "Vape Flavours", desc: "Premium flavored etomidate vape products in various fruit and specialty flavors." },
+const sorters = {
+  featured: null,
+  "price-asc": (a, b) => startingPrice(a) - startingPrice(b),
+  "price-desc": (a, b) => startingPrice(b) - startingPrice(a),
+  name: (a, b) => a.name.localeCompare(b.name),
 };
 
 export default function ShopClient({ products }) {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeFilter, setActiveFilter] = useState(() => {
-    const cat = searchParams?.get("category");
-    return cat ? cat : "all";
-  });
-  const heroRef = useRef(null);
-  const categoriesRef = useRef(null);
+  const rawFilter = searchParams?.get("strain");
+  const activeFilter = rawFilter && STRAINS[rawFilter] ? rawFilter : "all";
 
-  const categories = ["powder", "vape", "liquid", "vape flavours"].filter((cat) =>
-    products.some((p) => p.category === cat)
-  );
+  const [sort, setSort] = useState("featured");
+  const [inStockOnly, setInStockOnly] = useState(false);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    gsap.registerPlugin(ScrollTrigger);
+  const strains = STRAIN_ORDER.filter((s) => products.some((p) => strainOf(p) === s));
 
-    // Hero animation
-    if (heroRef.current) {
-      const els = heroRef.current.querySelectorAll(".hero-anim");
-      gsap.fromTo(els,
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" }
-      );
-    }
-  }, []);
+  const setFilter = (strain) => {
+    const url = strain === "all" ? "/shop" : `/shop?strain=${encodeURIComponent(strain)}`;
+    router.replace(url, { scroll: false });
+  };
 
-  useEffect(() => {
-    if (!categoriesRef.current) return;
-    const sections = categoriesRef.current.querySelectorAll(".category-section");
-    sections.forEach((section) => {
-      const cards = section.querySelectorAll(".shop-card");
-      gsap.killTweensOf(cards);
-      gsap.fromTo(cards,
-        { opacity: 0, y: 50, scale: 0.96 },
-        {
-          opacity: 1, y: 0, scale: 1,
-          duration: 0.6, stagger: 0.1, ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 85%",
-            once: true,
-          },
-        }
-      );
-    });
-    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
-  }, [activeFilter]);
+  const visible = useMemo(() => {
+    let list = products.filter((p) => (inStockOnly ? p.inStock : true));
+    if (sorters[sort]) list = [...list].sort(sorters[sort]);
+    return list;
+  }, [products, sort, inStockOnly]);
 
-  const displayCategories = activeFilter === "all"
-    ? categories
-    : categories.filter((c) => c === activeFilter);
+  const displayStrains = activeFilter === "all" ? strains : strains.filter((s) => s === activeFilter);
+  const activeMeta = activeFilter !== "all" ? STRAINS[activeFilter] : null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Hero */}
-      <div ref={heroRef} className="relative overflow-hidden border-b border-gray-200 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative z-10">
-          {/* Breadcrumb */}
-          <nav className="hero-anim flex items-center gap-1.5 text-sm text-gray-500 mb-6">
-            <Link href="/" className="hover:text-[#00d4aa] transition-colors">Home</Link>
+      <section className="relative overflow-hidden paper-grain border-b border-sand">
+        <div className="absolute -top-32 -right-24 w-96 h-96 rounded-full bg-gold-soft/40 blur-3xl pointer-events-none" />
+        <CannabisIcon className="absolute right-6 md:right-24 top-1/2 -translate-y-1/2 w-56 h-56 md:w-72 md:h-72 text-moss/[0.07] animate-sway pointer-events-none" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+          <nav className="flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-bark/60">
+            <Link href="/" className="hover:text-forest transition-colors">Home</Link>
             <FiChevronRight className="w-3 h-3" />
-            <span className="text-[#00d4aa] font-medium">Shop</span>
+            <Link href="/shop" className={activeMeta ? "hover:text-forest transition-colors" : "text-clay"}>Shop</Link>
+            {activeMeta && (
+              <>
+                <FiChevronRight className="w-3 h-3" />
+                <span className="text-clay">{activeMeta.label}</span>
+              </>
+            )}
           </nav>
 
-          <h1 className="hero-anim text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
-            All <span className="text-[#00d4aa]">Products</span>
-          </h1>
-          <p className="hero-anim text-gray-600 max-w-xl text-base mb-6">
-            Lab-tested, COA-certified etomidate in three forms. Each product ships within 48h with discreet packaging.
-          </p>
-
-          {/* Filter pills - Teal style like reference */}
-          <div className="hero-anim flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => setActiveFilter("all")}
-              className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all border-2 ${
-                activeFilter === "all"
-                  ? "bg-[#00d4aa] border-[#00d4aa] text-black"
-                  : "bg-white border-gray-300 text-gray-700 hover:border-[#00d4aa] hover:text-[#00d4aa]"
-              }`}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeFilter}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.35 }}
             >
-              All Products ({products.length})
-            </button>
-            {categories.map((cat) => {
-              const count = products.filter((p) => p.category === cat).length;
+              <h1 className="mt-6 font-display text-5xl md:text-6xl text-forest leading-[1.05]">
+                {activeMeta ? (
+                  <>
+                    {activeMeta.long.split(" ")[0]} <em className="text-moss">{activeMeta.long.split(" ").slice(1).join(" ")}</em>
+                  </>
+                ) : (
+                  <>
+                    The <em className="text-moss">Menu</em>
+                  </>
+                )}
+              </h1>
+              <p className="mt-4 max-w-xl text-lg text-bark/75 leading-relaxed">
+                {activeMeta
+                  ? activeMeta.description
+                  : "Small-batch cannabis flower — indica, sativa & hybrid strains. Independently lab tested, sealed fresh and shipped discreetly worldwide."}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
+
+      {/* Filter bar */}
+      <div className="sticky top-[112px] z-30 bg-cream/90 backdrop-blur-md border-b border-sand">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col lg:flex-row lg:items-center gap-4 justify-between">
+          <div className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-1 lg:pb-0">
+            {["all", ...strains].map((strain) => {
+              const count = strain === "all" ? products.length : products.filter((p) => strainOf(p) === strain).length;
+              const active = activeFilter === strain;
               return (
                 <button
-                  key={cat}
-                  onClick={() => setActiveFilter(cat)}
-                  className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all border-2 ${
-                    activeFilter === cat
-                      ? "bg-[#00d4aa] border-[#00d4aa] text-black"
-                      : "bg-white border-gray-300 text-gray-700 hover:border-[#00d4aa] hover:text-[#00d4aa]"
+                  key={strain}
+                  onClick={() => setFilter(strain)}
+                  className={`relative shrink-0 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors border ${
+                    active ? "text-cream border-forest" : "text-forest border-sand bg-paper hover:border-forest/40"
                   }`}
                 >
-                  {categoryInfo[cat]?.label} ({count})
+                  {active && (
+                    <motion.span layoutId="shop-filter" className="absolute inset-0 rounded-full bg-forest" transition={{ type: "spring", bounce: 0.2, duration: 0.5 }} />
+                  )}
+                  <span className="relative flex items-center gap-2">
+                    <CannabisIcon className="w-4 h-4" stem={false} />
+                    {strain === "all" ? "All Flower" : STRAINS[strain].label}
+                    <span className={`text-xs ${active ? "text-gold-soft" : "text-bark/50"}`}>{count}</span>
+                  </span>
                 </button>
               );
             })}
             {activeFilter !== "all" && (
               <button
-                onClick={() => setActiveFilter("all")}
-                className="flex items-center gap-1 px-4 py-2 text-sm text-gray-500 hover:text-[#00d4aa] transition-colors"
+                onClick={() => setFilter("all")}
+                className="shrink-0 inline-flex items-center gap-1 px-3 py-2 text-sm text-bark/70 hover:text-clay transition-colors"
               >
                 <FiX className="w-4 h-4" />
-                Clear all
+                Clear
               </button>
             )}
+          </div>
+
+          <div className="flex items-center gap-4">
+            <label className="inline-flex items-center gap-2 text-sm text-bark cursor-pointer select-none">
+              <span
+                className={`relative w-10 h-6 rounded-full transition-colors ${inStockOnly ? "bg-moss" : "bg-sand"}`}
+              >
+                <span
+                  className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-paper shadow transition-transform ${inStockOnly ? "translate-x-4" : ""}`}
+                />
+              </span>
+              <input type="checkbox" className="sr-only" checked={inStockOnly} onChange={(e) => setInStockOnly(e.target.checked)} />
+              In stock only
+            </label>
+
+            <div className="relative">
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                className="appearance-none rounded-full border border-sand bg-paper pl-4 pr-10 py-2 text-sm text-forest focus:outline-none focus:border-gold"
+                aria-label="Sort products"
+              >
+                <option value="featured">Featured</option>
+                <option value="price-asc">Price: low to high</option>
+                <option value="price-desc">Price: high to low</option>
+                <option value="name">Name A–Z</option>
+              </select>
+              <FiChevronDown className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-bark/60" />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Category Sections */}
-      <div ref={categoriesRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {displayCategories.map((cat, catIdx) => {
-          const catProducts = products.filter((p) => p.category === cat);
-          if (catProducts.length === 0) return null;
-
+      {/* Products */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        {displayStrains.map((strain, idx) => {
+          const list = visible.filter((p) => strainOf(p) === strain);
+          if (list.length === 0) return null;
+          const meta = STRAINS[strain];
           return (
-            <div key={cat} className={`category-section ${catIdx > 0 ? "mt-12 pt-12 border-t border-gray-200" : ""}`}>
-              {/* Category Header */}
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-10 h-10 bg-[#00d4aa]/10 border border-[#00d4aa]/20 rounded-xl flex items-center justify-center text-[#00d4aa]">
-                  {categoryInfo[cat]?.icon}
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900">
-                    {categoryInfo[cat]?.heading}
-                  </h2>
-                  <p className="text-sm text-gray-500">{categoryInfo[cat]?.desc}</p>
-                </div>
-                <div className="ml-auto hidden sm:block">
-                  <span className="text-xs text-gray-600 bg-gray-100 border border-gray-200 px-3 py-1 rounded-full">
-                    {catProducts.length} product{catProducts.length !== 1 ? "s" : ""}
-                  </span>
-                </div>
-              </div>
-
-              {/* Product Cards - Clean grid like reference */}
-              <div className={`grid gap-4 ${catProducts.length === 1 ? "grid-cols-1 max-w-sm mx-auto" : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"}`}>
-                {catProducts.map((product) => (
-                  <Link key={product._id} href={`/shop/${product.slug}`} className="block group">
-                    <div className="shop-card bg-white rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200">
-                      {/* Badge */}
-                      <div className="absolute top-2 left-2 z-10">
-                        <span className="inline-flex items-center text-[10px] font-bold uppercase tracking-wider text-gray-900 bg-[#ff6b6b] px-2 py-1 rounded">
-                          Multi Buy
-                        </span>
-                      </div>
-                      
-                      {/* Image */}
-                      <div className="relative h-48 bg-gray-50 flex items-center justify-center overflow-hidden p-4">
-                        {product.image ? (
-                          <img src={product.image} alt={product.name} className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" />
-                        ) : (
-                          <div className="text-center">
-                            {productIcons[product.category]}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-3">
-                        {/* Name */}
-                        <h3 className="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">{product.name}</h3>
-                        
-                        {/* Price */}
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-lg font-bold text-gray-900">€{product.price?.toFixed(2)}</span>
-                          {product.sizes?.length > 0 && (
-                            <span className="text-xs text-gray-500">{product.sizes[0]?.label}</span>
-                          )}
-                        </div>
-
-                        {/* Quick add button */}
-                        <button className="w-full py-2 bg-[#00d4aa] text-black text-sm font-semibold rounded hover:bg-[#00b894] transition-colors">
-                          Add to Cart
-                        </button>
-                      </div>
+            <section key={strain} className={idx > 0 ? "mt-20" : ""}>
+              {activeFilter === "all" && (
+                <div className="mb-8 flex items-end justify-between gap-6 border-b border-sand pb-5">
+                  <div className="flex items-center gap-4">
+                    <span className={`w-14 h-14 blob-shape ${meta.tint} text-moss flex items-center justify-center`}>
+                      <CannabisIcon className="w-7 h-7" />
+                    </span>
+                    <div>
+                      <h2 className="font-display text-3xl text-forest">{meta.long}</h2>
+                      <p className="text-sm text-bark/65">{meta.tagline}</p>
                     </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
+                  </div>
+                  <button
+                    onClick={() => setFilter(strain)}
+                    className="hidden sm:inline-flex items-center gap-1 text-sm font-medium text-moss hover:text-forest link-underline"
+                  >
+                    See all {list.length}
+                    <FiChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <AnimatePresence mode="popLayout">
+                  {list.map((product, i) => (
+                    <motion.div
+                      key={product._id || product.slug}
+                      layout
+                      initial={{ opacity: 0, y: 24 }}
+                      animate={{ opacity: 1, y: 0, transition: { delay: Math.min(i, 8) * 0.05, duration: 0.45 } }}
+                      exit={{ opacity: 0, scale: 0.96 }}
+                    >
+                      <ProductCard product={product} />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </motion.div>
+            </section>
           );
         })}
 
-        {displayCategories.length === 0 && (
-          <div className="text-center py-24">
-            <p className="text-gray-500">No products found.</p>
+        {displayStrains.every((strain) => visible.filter((p) => strainOf(p) === strain).length === 0) && (
+          <div className="rounded-[28px] border border-dashed border-sand bg-paper px-8 py-24 text-center">
+            <div className="mx-auto w-20 h-20 blob-shape bg-sand flex items-center justify-center text-moss">
+              <CannabisIcon className="w-10 h-10" />
+            </div>
+            <h3 className="mt-6 font-display text-3xl text-forest">Nothing on the shelf here yet</h3>
+            <p className="mt-2 text-bark/70">
+              {inStockOnly ? "Try showing sold-out items too." : "A fresh harvest is on its way — check back soon."}
+            </p>
+            {(activeFilter !== "all" || inStockOnly) && (
+              <button
+                onClick={() => {
+                  setInStockOnly(false);
+                  setFilter("all");
+                }}
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3 text-sm font-semibold text-cream hover:bg-moss transition-colors"
+              >
+                Show everything
+              </button>
+            )}
           </div>
         )}
       </div>

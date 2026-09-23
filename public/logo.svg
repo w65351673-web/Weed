@@ -1,43 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 48" fill="none">
-  <!-- Modern crystal/shield icon with purple gradient -->
-  <g transform="translate(4, 2)">
-    <!-- Outer shield/crystal shape -->
-    <path d="M22 2L34 10L34 26L22 34L10 26L10 10Z" stroke="url(#gradient1)" stroke-width="2.5" fill="none"/>
-    
-    <!-- Inner glow -->
-    <path d="M22 6L30 11L30 24L22 29L14 24L14 11Z" fill="url(#gradient2)" opacity="0.4"/>
-    
-    <!-- Center crystal -->
-    <path d="M22 12L18 15L18 21L22 24L26 21L26 15Z" fill="url(#gradient1)" opacity="0.9"/>
-    
-    <!-- Light reflections -->
-    <path d="M19 10L22 8L25 10L24 12L20 12Z" fill="#00d4aa" opacity="0.7"/>
-    <circle cx="17" cy="14" r="1.2" fill="#ffffff" opacity="0.9"/>
-    <circle cx="27" cy="18" r="0.9" fill="#ffffff" opacity="0.6"/>
-    
-    <!-- Sparkle accents -->
-    <path d="M10 10L12 7L14 10L12 13Z" fill="#00d4aa" opacity="0.6"/>
-    <path d="M30 10L32 7L34 10L32 13Z" fill="#00d4aa" opacity="0.6"/>
-    <path d="M10 26L12 29L14 26L12 23Z" fill="#00d4aa" opacity="0.6"/>
-    <path d="M30 26L32 29L34 26L32 23Z" fill="#00d4aa" opacity="0.6"/>
-    
-    <!-- Gradients -->
-    <defs>
-      <linearGradient id="gradient1" x1="10" y1="2" x2="34" y2="34" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#00d4aa"/>
-        <stop offset="1" stop-color="#00b894"/>
-      </linearGradient>
-      <linearGradient id="gradient2" x1="14" y1="6" x2="30" y2="29" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#00d4aa"/>
-        <stop offset="1" stop-color="#00d4aa"/>
-      </linearGradient>
-    </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 48" fill="none">
+  <defs>
+    <path id="leaflet" d="M0 0 C3.2 -5 3 -11 0 -17 C-3 -11 -3.2 -5 0 0 Z"/>
+  </defs>
+
+  <!-- Badge -->
+  <circle cx="24" cy="24" r="22" fill="#1f3a2b"/>
+  <circle cx="24" cy="24" r="19" stroke="#c8a24a" stroke-opacity="0.55" stroke-width="0.8" stroke-dasharray="1.5 2.2"/>
+
+  <!-- Cannabis leaf -->
+  <g transform="translate(24 31)" fill="#e6d3a3">
+    <use href="#leaflet" transform="scale(1.05 1.2)"/>
+    <use href="#leaflet" transform="rotate(-30) scale(0.95 1.02)"/>
+    <use href="#leaflet" transform="rotate(30) scale(0.95 1.02)"/>
+    <use href="#leaflet" transform="rotate(-62) scale(0.8 0.78)"/>
+    <use href="#leaflet" transform="rotate(62) scale(0.8 0.78)"/>
+    <use href="#leaflet" transform="rotate(-92) scale(0.6 0.5)"/>
+    <use href="#leaflet" transform="rotate(92) scale(0.6 0.5)"/>
   </g>
-  
-  <!-- Brand text -->
-  <text x="50" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="800" fill="#111827" letter-spacing="-0.02em">Etomidate</text>
-  <text x="50" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="800" fill="url(#gradient1)" letter-spacing="-0.02em">Shop</text>
-  <text x="125" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#00b894" letter-spacing="0.08em">.com</text>
+  <path d="M24 31 L24 38" stroke="#c8a24a" stroke-width="1.4" stroke-linecap="round"/>
+
+  <!-- Wordmark -->
+  <text x="56" y="29" font-family="Georgia, 'Times New Roman', serif" font-size="24" font-weight="600" fill="#1f3a2b" letter-spacing="-0.01em">Weed<tspan font-style="italic" fill="#3f6b4a">Laps</tspan></text>
+  <text x="57" y="42" font-family="Arial, Helvetica, sans-serif" font-size="7.2" font-weight="700" fill="#b9794f" letter-spacing="0.28em">CANNABIS CO. · EST 2019</text>
 </svg>
 
 

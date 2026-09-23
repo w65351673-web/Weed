@@ -5,33 +5,31 @@ import AboutClient from "@/components/AboutClient";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "About EtomidateShop — Trusted Etomidate Supplier Since 2019 | EtomidateShop.com",
+  title: "About WeedLaps — Trusted Cannabis Dispensary Since 2019 | WeedLaps.com",
   description:
-    "EtomidateShop.com has been a trusted name in pharmaceutical-grade etomidate since 2019. Learn about our GMP-certified lab sourcing, rigorous quality testing, and commitment to ≥99.8% purity with every product.",
+    "WeedLaps.com has been a trusted name in premium cannabis since 2019. Learn about our craft growers, rigorous lab testing, and commitment to top-shelf quality with every product.",
   keywords: [
-    "trusted etomidate supplier",
-    "reliable etomidate vendor",
-    "best etomidate supplier 2024",
-    "etomidate supplier since 2019",
-    "pharmaceutical grade etomidate supplier",
-    "GMP certified etomidate",
-    "etomidate quality standards",
-    "HPLC tested etomidate supplier",
-    "etomidate COA every order",
-    "etomidate 99.8% purity guarantee",
-    "discreet etomidate supplier",
-    "etomidate worldwide shipping supplier",
-    "about EtomidateShop",
-    "etomidateshop.com review",
+    "trusted cannabis supplier",
+    "reliable weed vendor",
+    "best online dispensary",
+    "cannabis dispensary since 2019",
+    "premium cannabis supplier",
+    "lab tested weed",
+    "cannabis quality standards",
+    "trusted online weed shop",
+    "discreet cannabis supplier",
+    "weed worldwide shipping",
+    "about WeedLaps",
+    "weedlaps.com review",
   ],
   openGraph: {
-    title: "About EtomidateShop — Quality & Trust Since 2019",
+    title: "About WeedLaps — Quality & Trust Since 2019",
     description:
-      "GMP-certified lab sourcing, ≥99.8% purity, COA with every order. Learn why researchers worldwide trust EtomidateShop.com.",
-    url: "https://etomidateshop.com/about",
+      "Craft-grown cannabis, lab-tested quality, discreet shipping with every order. Learn why customers worldwide trust WeedLaps.com.",
+    url: "https://weedlaps.com/about",
   },
   alternates: {
-    canonical: "https://etomidateshop.com/about",
+    canonical: "https://weedlaps.com/about",
   },
 };
 

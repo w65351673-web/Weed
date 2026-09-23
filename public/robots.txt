@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /api
 
-Sitemap: https://etomidateshop.com/sitemap.xml
+Sitemap: https://weedlaps.com/sitemap.xml

@@ -1,81 +1,134 @@
 import Link from "next/link";
-import { FiMail, FiPhone, FiTruck, FiArrowRight } from "react-icons/fi";
-import { FaFlask, FaVial, FaTint } from "react-icons/fa";
+import { FiMail, FiTruck, FiArrowUpRight, FiShield, FiPackage } from "react-icons/fi";
+import { FaTelegramPlane } from "react-icons/fa";
+import CannabisIcon from "@/components/CannabisIcon";
+
+const shopLinks = [
+  { href: "/shop?strain=indica", label: "Indica Strains" },
+  { href: "/shop?strain=sativa", label: "Sativa Strains" },
+  { href: "/shop?strain=hybrid", label: "Hybrid Strains" },
+  { href: "/shop", label: "All Flower" },
+];
+
+const companyLinks = [
+  { href: "/about", label: "Our Story" },
+  { href: "/contact", label: "Contact Us" },
+  { href: "/contact", label: "Shipping & Discretion" },
+  { href: "/contact", label: "Wholesale Enquiries" },
+];
 
 export default function Footer() {
   return (
-    <footer className="bg-white text-gray-500 mt-auto border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {/* Brand */}
-          <div>
-            <div className="mb-4">
-              <img src="/logo.svg" alt="EtomidateShop.com" className="h-10" />
+    <footer className="mt-auto forest-grain text-cream/80">
+      {/* Promise strip */}
+      <div className="border-b border-cream/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {[
+            { icon: <FiShield className="w-5 h-5" />, title: "Independently tested", text: "Verified results for every batch" },
+            { icon: <FiPackage className="w-5 h-5" />, title: "Smell-proof & discreet", text: "Plain, vacuum-sealed packaging" },
+            { icon: <FiTruck className="w-5 h-5" />, title: "Worldwide delivery", text: "Tracked shipping, wherever you are" },
+          ].map((p) => (
+            <div key={p.title} className="flex items-center gap-4">
+              <div className="w-11 h-11 rounded-full border border-gold/40 text-gold flex items-center justify-center shrink-0">
+                {p.icon}
+              </div>
+              <div>
+                <p className="font-display text-lg text-cream leading-tight">{p.title}</p>
+                <p className="text-xs text-cream/60">{p.text}</p>
+              </div>
             </div>
-            <p className="text-sm leading-relaxed">
-              Premium etomidate products for researchers and licensed buyers. Quality-tested, discreetly shipped worldwide.
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+          {/* Brand */}
+          <div className="md:col-span-5">
+            <Link href="/" className="inline-flex items-center gap-3">
+              <span className="w-12 h-12 rounded-full bg-cream/5 border border-gold/40 flex items-center justify-center">
+                <CannabisIcon className="w-7 h-7 text-gold-soft" />
+              </span>
+              <span className="font-display text-3xl text-cream">
+                Weed<em className="text-gold italic">Laps</em>
+              </span>
+            </Link>
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-cream/65">
+              Small-batch cannabis flower from growers who care. Hand-trimmed, slow-cured buds — sealed with
+              love and shipped discreetly to your door.
             </p>
+            <div className="mt-6 flex items-center gap-3">
+              <a
+                href="https://t.me/chemsolution12mal"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Telegram"
+                className="w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center hover:bg-gold hover:text-forest-deep hover:border-gold transition-colors"
+              >
+                <FaTelegramPlane className="w-4 h-4" />
+              </a>
+              <a
+                href="mailto:orders@weedlaps.com"
+                aria-label="Email"
+                className="w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center hover:bg-gold hover:text-forest-deep hover:border-gold transition-colors"
+              >
+                <FiMail className="w-4 h-4" />
+              </a>
+            </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-gray-900 text-sm font-semibold uppercase tracking-wider mb-4">
-              Quick Links
-            </h4>
-            <ul className="space-y-2.5 text-sm">
-              <li>
-                <Link href="/shop" className="flex items-center gap-2 hover:text-gray-900 transition-colors group">
-                  <FiArrowRight className="w-3 h-3 text-[#00d4aa] group-hover:translate-x-0.5 transition-transform" />
-                  Shop All Products
-                </Link>
-              </li>
-              <li>
-                <Link href="/shop?category=powder" className="flex items-center gap-2 hover:text-gray-900 transition-colors group">
-                  <FaFlask className="w-3 h-3 text-[#00d4aa]" />
-                  Etomidate Powder
-                </Link>
-              </li>
-              <li>
-                <Link href="/shop?category=vape" className="flex items-center gap-2 hover:text-gray-900 transition-colors group">
-                  <FaVial className="w-3 h-3 text-[#00d4aa]" />
-                  K-Pods (Vape)
-                </Link>
-              </li>
-              <li>
-                <Link href="/shop?category=liquid" className="flex items-center gap-2 hover:text-gray-900 transition-colors group">
-                  <FaTint className="w-3 h-3 text-[#00d4aa]" />
-                  Etomidate Liquid
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="flex items-center gap-2 hover:text-gray-900 transition-colors group">
-                  <FiArrowRight className="w-3 h-3 text-[#00d4aa] group-hover:translate-x-0.5 transition-transform" />
-                  About Us
-                </Link>
-              </li>
+          {/* Shop */}
+          <div className="md:col-span-3">
+            <h4 className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold mb-5">The Shop</h4>
+            <ul className="space-y-3 text-sm">
+              {shopLinks.map((l) => (
+                <li key={l.label}>
+                  <Link href={l.href} className="link-underline hover:text-cream transition-colors">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div className="md:col-span-2">
+            <h4 className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold mb-5">Company</h4>
+            <ul className="space-y-3 text-sm">
+              {companyLinks.map((l) => (
+                <li key={l.label}>
+                  <Link href={l.href} className="link-underline hover:text-cream transition-colors">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Contact */}
-          <div>
-            <h4 className="text-gray-900 text-sm font-semibold uppercase tracking-wider mb-4">
-              Contact
-            </h4>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-2.5">
-                <FiMail className="w-4 h-4 text-[#00d4aa] shrink-0" />
-                orders@etomidateshop.com
-              </li>
-              <li className="flex items-start gap-2.5 pt-2 text-xs">
-                <FiTruck className="w-4 h-4 text-[#00d4aa] shrink-0 mt-0.5" />
-                All orders shipped within 48h via tracked, discreet packaging.
-              </li>
-            </ul>
+          <div className="md:col-span-2">
+            <h4 className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold mb-5">Say Hello</h4>
+            <a
+              href="mailto:orders@weedlaps.com"
+              className="group inline-flex items-center gap-1 text-sm hover:text-cream transition-colors break-all"
+            >
+              orders@weedlaps.com
+              <FiArrowUpRight className="w-3.5 h-3.5 text-gold transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </a>
+            <p className="mt-3 text-xs text-cream/55 leading-relaxed">
+              Replies within 2 hours, 7 days a week.
+            </p>
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-10 pt-6 text-center text-xs">
-          &copy; {new Date().getFullYear()} EtomidateShop.com — All rights reserved.
+        {/* Big wordmark */}
+        <div aria-hidden="true" className="mt-16 select-none font-display text-[18vw] md:text-[11rem] leading-none text-cream/[0.04] text-center tracking-tight">
+          weedlaps
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-cream/10 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-cream/50">
+          <p>&copy; {new Date().getFullYear()} WeedLaps.com — Grown with care.</p>
+          <p>For adults 18+ only. Please consume responsibly and follow your local laws.</p>
         </div>
       </div>
     </footer>

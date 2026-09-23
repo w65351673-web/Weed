@@ -38,7 +38,9 @@ export async function POST(request) {
     slug,
     name: body.name,
     price: parseFloat(body.price) || 0,
-    category: body.category || "powder",
+    category: "powder",
+    strainType: body.strainType || "",
+    grade: body.grade || "",
     shortDescription: body.shortDescription || "",
     description: body.description || "",
     specifications: body.specifications || [],
@@ -71,6 +73,8 @@ export async function PATCH(request) {
   if (body.inStock !== undefined) updateFields.inStock = body.inStock;
   if (body.sizes !== undefined) updateFields.sizes = body.sizes;
   if (body.category !== undefined) updateFields.category = body.category;
+  if (body.strainType !== undefined) updateFields.strainType = body.strainType;
+  if (body.grade !== undefined) updateFields.grade = body.grade;
   if (body.specifications !== undefined) updateFields.specifications = body.specifications;
   if (body.image !== undefined) updateFields.image = body.image;
 

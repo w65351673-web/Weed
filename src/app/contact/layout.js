@@ -1,30 +1,29 @@
 export const metadata = {
-  title: "Contact EtomidateShop — Order Support & Bulk Inquiries | EtomidateShop.com",
+  title: "Contact WeedLaps — Order Support & Bulk Inquiries | WeedLaps.com",
   description:
-    "Contact EtomidateShop.com for orders, inquiries, or support. We respond within 24 hours. Reach us via email at orders@etomidateshop.com for any questions about our etomidate products, shipping, or bulk orders.",
+    "Contact WeedLaps.com for orders, inquiries, or support. We respond within 24 hours. Reach us via email at orders@weedlaps.com for any questions about our cannabis products, shipping, or bulk orders.",
   keywords: [
-    "contact etomidate supplier",
-    "etomidate order support",
-    "etomidate bulk order inquiry",
-    "etomidate wholesale inquiry",
-    "buy etomidate bulk",
-    "etomidate shipping support",
-    "etomidate customer service",
-    "etomidate K-Pods order inquiry",
-    "etomidate powder order support",
-    "etomidate liquid order help",
-    "EtomidateShop contact",
-    "orders@etomidateshop.com",
-    "etomidate 24 hour support",
+    "contact cannabis supplier",
+    "weed order support",
+    "cannabis bulk order inquiry",
+    "weed wholesale inquiry",
+    "buy weed bulk",
+    "cannabis shipping support",
+    "weed customer service",
+    "cannabis order inquiry",
+    "weed order help",
+    "WeedLaps contact",
+    "orders@weedlaps.com",
+    "cannabis 24 hour support",
   ],
   openGraph: {
-    title: "Contact EtomidateShop — Orders & Support",
+    title: "Contact WeedLaps — Orders & Support",
     description:
-      "Have questions? Contact us at orders@etomidateshop.com for product inquiries, order support, or bulk pricing. We reply within 24 hours.",
-    url: "https://etomidateshop.com/contact",
+      "Have questions? Contact us at orders@weedlaps.com for product inquiries, order support, or bulk pricing. We reply within 24 hours.",
+    url: "https://weedlaps.com/contact",
   },
   alternates: {
-    canonical: "https://etomidateshop.com/contact",
+    canonical: "https://weedlaps.com/contact",
   },
 };
 

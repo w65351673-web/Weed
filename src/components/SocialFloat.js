@@ -8,15 +8,22 @@ const links = [
     label: "Telegram",
     href: "https://t.me/chemsolution12mal",
     icon: <FaTelegramPlane className="w-5 h-5" />,
-    bg: "bg-[#0088cc]",
-    hover: "hover:bg-[#0077b5]",
+    bg: "bg-moss text-cream",
+    hover: "hover:bg-forest",
+  },
+  {
+    label: "WhatsApp",
+    href: "https://wa.me/15559024481",
+    icon: <FaWhatsapp className="w-5 h-5" />,
+    bg: "bg-forest text-cream",
+    hover: "hover:bg-moss",
   },
   {
     label: "Email",
-    href: "mailto:orders@etomidateshop.com",
+    href: "mailto:orders@weedlaps.com",
     icon: <FiMail className="w-5 h-5" />,
-    bg: "bg-[#00d4aa]",
-    hover: "hover:bg-[#00b894]",
+    bg: "bg-gold text-forest-deep",
+    hover: "hover:bg-gold-soft",
   },
 ];
 
@@ -28,10 +35,9 @@ export default function SocialFloat() {
       {/* Toggle button */}
       <button
         onClick={() => setOpen(!open)}
-        className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
-          open
-            ? "bg-[#262626] text-white rotate-0"
-            : "bg-[#00d4aa] text-black hover:bg-[#00b894] hover:shadow-xl hover:shadow-[#00d4aa]/25"
+        aria-label={open ? "Close contact options" : "Open contact options"}
+        className={`w-14 h-14 rounded-full flex items-center justify-center shadow-[0_12px_30px_-10px_rgba(21,40,30,0.6)] ring-4 ring-cream transition-all duration-300 ${
+          open ? "bg-forest-deep text-gold-soft" : "bg-forest text-cream hover:bg-moss"
         }`}
       >
         {open ? <FiX className="w-6 h-6" /> : <FiMessageCircle className="w-6 h-6" />}
@@ -46,7 +52,7 @@ export default function SocialFloat() {
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`group flex items-center gap-3 ${link.bg} ${link.hover} text-white w-14 hover:w-auto rounded-full shadow-lg transition-all duration-300 overflow-hidden`}
+              className={`group flex items-center gap-3 ${link.bg} ${link.hover} w-14 hover:w-auto rounded-full shadow-lg transition-all duration-300 overflow-hidden`}
               style={{ animationDelay: `${i * 80}ms` }}
             >
               <div className="w-14 h-14 flex items-center justify-center shrink-0">
