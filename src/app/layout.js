@@ -1,4 +1,5 @@
 import { Plus_Jakarta_Sans, DM_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -114,6 +115,22 @@ export default function RootLayout({ children }) {
         <main className="flex-1">{children}</main>
         <Footer />
         <SocialFloat />
+        <Script
+          id="smartsupp-chat"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              var _smartsupp = _smartsupp || {};
+              _smartsupp.key = 'e4d4e2532ee9248e27d26eacf7d350f3099e17af';
+              window.smartsupp||(function(d) {
+                var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+                s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+                c.type='text/javascript';c.charset='utf-8';c.async=true;
+                c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+              })(document);
+            `,
+          }}
+        />
       </body>
     </html>
   );

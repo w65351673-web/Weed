@@ -10,7 +10,7 @@ export async function POST(request) {
   try {
     await dbConnect();
     const body = await request.json();
-    const { productId, productName, size, price, customerName, customerEmail, shippingAddress, message } = body;
+    const { productId, productName, size, price, customerName, customerEmail, customerPhone, shippingAddress, message } = body;
 
     if (!productId || !customerName || !customerEmail || !shippingAddress) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -24,6 +24,7 @@ export async function POST(request) {
       price,
       customerName,
       customerEmail,
+      customerPhone: customerPhone || "",
       shippingAddress,
       message: message || "",
       status: "pending",

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import CannabisIcon from "@/components/CannabisIcon";
 import { CATEGORIES, CategoryIcon, categoryLabel } from "@/lib/categories";
-import { FiCheck, FiUser, FiMail, FiMapPin, FiMessageSquare, FiShoppingBag, FiChevronRight, FiLoader, FiArrowLeft, FiPackage, FiShield, FiTruck, FiLock } from "react-icons/fi";
+import { FiCheck, FiUser, FiMail, FiPhone, FiMapPin, FiMessageSquare, FiShoppingBag, FiChevronRight, FiLoader, FiArrowLeft, FiPackage, FiShield, FiTruck, FiLock } from "react-icons/fi";
 import { FaBitcoin, FaTelegramPlane, FaWhatsapp } from "react-icons/fa";
 
 const inputCls =
@@ -26,7 +26,7 @@ export default function OrderPage() {
   const [selectedSize, setSelectedSize] = useState(0);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", address: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", message: "" });
   const [method, setMethod] = useState("form");
 
   useEffect(() => {
@@ -87,6 +87,7 @@ export default function OrderPage() {
           price: product.sizes?.[selectedSize]?.price || product.price || 0,
           customerName: form.name,
           customerEmail: form.email,
+          customerPhone: form.phone,
           shippingAddress: form.address,
           message: form.message,
         }),
@@ -293,6 +294,21 @@ export default function OrderPage() {
                         className={inputCls}
                       />
                     </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelCls}>Phone / WhatsApp number</label>
+                  <div className="relative">
+                    <FiPhone className={iconCls} />
+                    <input
+                      type="tel"
+                      placeholder="+49 170 1234567"
+                      required
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      className={inputCls}
+                    />
                   </div>
                 </div>
 
