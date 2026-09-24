@@ -67,16 +67,16 @@ export default function ContactPage() {
     {
       icon: <FaTelegramPlane className="w-5 h-5" />,
       label: "Telegram",
-      value: "@chemsolution12mal",
+      value: "+1 (910) 227-9379",
       desc: "Fastest way to reach us",
-      href: "https://t.me/chemsolution12mal",
+      href: "https://t.me/+19102279379",
     },
     {
       icon: <FaWhatsapp className="w-5 h-5" />,
       label: "WhatsApp",
-      value: siteSettings.contactPhone || "+1 (555) 902-4481",
+      value: "+1 (906) 261-3088",
       desc: "Chat with us directly",
-      href: "https://wa.me/15559024481",
+      href: "https://wa.me/19062613088",
     },
   ];
 

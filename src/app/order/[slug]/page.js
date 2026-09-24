@@ -14,9 +14,9 @@ const inputCls =
 const labelCls = "block text-[11px] font-semibold text-bark/70 uppercase tracking-[0.18em] mb-2";
 const iconCls = "absolute left-4 top-4 w-4 h-4 text-bark/40";
 
-// TODO: replace with the real WhatsApp business number (country code + number, digits only)
-const WHATSAPP_NUMBER = "15559024481";
-const TELEGRAM_URL = "https://t.me/chemsolution12mal";
+// WhatsApp business number and Telegram contact (digits only for wa.me)
+const WHATSAPP_NUMBER = "19062613088";
+const TELEGRAM_URL = "https://t.me/+19102279379";
 
 export default function OrderPage() {
   const { slug } = useParams();

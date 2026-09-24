@@ -151,7 +151,7 @@ export async function sendOrderConfirmation(orderDoc) {
         : `<p style="color: #55504a; font-size: 13px; margin: 0;">We will reply shortly with our Bitcoin wallet address and the exact BTC amount for <strong>${total}</strong>.</p>`}
     </div>
 
-    <p style="color: #55504a; font-size: 13px; margin: 22px 0 0;">Questions? Reply to this email or message us on Telegram <strong>@chemsolution12mal</strong>.</p>
+    <p style="color: #55504a; font-size: 13px; margin: 22px 0 0;">Questions? Reply to this email or message us on Telegram <strong>+1 (910) 227-9379</strong>.</p>
     `
   );
 
